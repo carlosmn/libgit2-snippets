@@ -3,11 +3,29 @@
 
 #include "common.h"
 
+static int cb_update_tips(const char *ref, const git_oid *old, const git_oid *new)
+{
+	char *hex;
+
+	fprintf(stderr, "%s:\t", ref);
+
+	hex = git_oid_allocfmt(old);
+	fprintf(stderr, "%s -> ", hex);
+	free(hex);
+
+	hex = git_oid_allocfmt(new);
+	fprintf(stderr, "%s\n", hex);
+	free(hex);
+
+	return 0;
+}
+
 int cmd_fetch(git_repository *repo, int argc, const char **argv)
 {
 	int error;
-	char *pack;
 	git_remote *r;
+	git_off_t bytes = 0;
+	git_indexer_stats stats;
 
 	if (argc < 1)
 		die("usage: ./git fetch <remote>");
@@ -20,15 +38,18 @@ int cmd_fetch(git_repository *repo, int argc, const char **argv)
 	if (error < GIT_SUCCESS)
 		die_giterror();
 
-	error = git_remote_download(&pack, r);
+	error = git_remote_download(r, &bytes, &stats);
 	if (error < GIT_SUCCESS)
 		die_giterror();
 
-	fprintf(stderr, "fetched pack: %s\n", pack);
-
 	git_remote_disconnect(r);
 
-	git_remote_update_tips(r);
+	fprintf(stderr, "Received %d/%d objects in %" PRId64 " bytes\n",
+		stats.processed, stats.total, bytes);
+
+	error = git_remote_update_tips(r, cb_update_tips);
+	if (error < GIT_SUCCESS)
+		die_giterror();
 
 	git_remote_free(r);
 
