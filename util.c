@@ -21,9 +21,9 @@ void NORETURN die_giterror()
 {
 	const git_error *error;
 
-	error = git_error_last();
+	error = giterr_last();
 	fprintf(stderr, "%s\n", error->message);
-	git_error_clear();
+	giterr_clear();
 
 	exit(128);
 }
