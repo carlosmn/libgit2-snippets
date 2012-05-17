@@ -19,11 +19,13 @@ void NORETURN die(const char *err, ...)
 
 void NORETURN die_giterror()
 {
+	int ret;
 	const git_error *error;
 
 	error = giterr_last();
+	ret = error->klass;
 	fprintf(stderr, "%s\n", error->message);
 	giterr_clear();
 
-	exit(128);
+	exit(ret);
 }
