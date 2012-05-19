@@ -55,7 +55,7 @@ int run_cmd(cmd cb, int argc, const char **argv)
 	git_repository *repo = NULL;
 
 	error = git_repository_open(&repo, repo_path ? repo_path : ".git");
-	if (error < GIT_SUCCESS)
+	if (error < 0)
 		die_giterror();
 
 	error = cb(repo, argc, argv);

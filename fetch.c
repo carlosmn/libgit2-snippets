@@ -31,15 +31,15 @@ int cmd_fetch(git_repository *repo, int argc, const char **argv)
 		die("usage: ./git fetch <remote>");
 
 	error = git_remote_load(&r, repo, argv[0]);
-	if (error < GIT_SUCCESS)
+	if (error < 0)
 		die_giterror();
 
 	error = git_remote_connect(r, GIT_DIR_FETCH);
-	if (error < GIT_SUCCESS)
+	if (error < 0)
 		die_giterror();
 
 	error = git_remote_download(r, &bytes, &stats);
-	if (error < GIT_SUCCESS)
+	if (error < 0)
 		die_giterror();
 
 	git_remote_disconnect(r);
@@ -48,7 +48,7 @@ int cmd_fetch(git_repository *repo, int argc, const char **argv)
 		stats.processed, stats.total, bytes);
 
 	error = git_remote_update_tips(r, cb_update_tips);
-	if (error < GIT_SUCCESS)
+	if (error < 0)
 		die_giterror();
 
 	git_remote_free(r);
