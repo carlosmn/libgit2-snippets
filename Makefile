@@ -3,7 +3,7 @@ LIBGIT2_PATH ?= ~/coding/build/libgit2/lib
 DEPS = $(shell PKG_CONFIG_PATH=$(LIBGIT2_PATH)/pkgconfig pkg-config --cflags --libs libgit2)
 
 CC ?=gcc
-CFLAGS += -Wall -Werror -O0 -g $(DEPS)
+CFLAGS += -Wall -Werror -O2 $(DEPS)
 
 OBJECTS = $(patsubst %.c,%.o,$(wildcard *.c))
 
