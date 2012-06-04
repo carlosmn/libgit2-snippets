@@ -11,4 +11,4 @@ all: $(OBJECTS)
 	$(CC) $(CFLAGS) -o git $(OBJECTS)
 
 clean:
-	rm $(OBJECTS) git
+	rm -f $(OBJECTS) git
