@@ -51,6 +51,8 @@ int cmd_fetch(git_repository *repo, int argc, const char **argv)
 	git_indexer_stats stats;
 	git_auth_cb_data auth;
 
+	memset(&auth, 0x0, sizeof(auth));
+
 	if (argc < 1)
 		die("usage: ./git fetch <remote>");
 
@@ -79,8 +81,10 @@ int cmd_fetch(git_repository *repo, int argc, const char **argv)
 		die_giterror();
 
 	git_remote_free(r);
-	free(auth.username);
-	free(auth.password);
+	if (auth.username)
+		free(auth.username);
+	if (auth.password)
+		free(auth.password);
 
 	return error;
 }
