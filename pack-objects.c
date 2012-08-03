@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "common.h"
 
@@ -10,12 +11,15 @@ int cmd_pack_objects(git_repository *repo, int argc, const char **argv)
 	git_packbuilder *pb;
 
 	if (argc < 1)
-		die("usage: ./git pack-objects <dst>");
+		die("usage: ./git pack-objects <dst> [<threads>]");
 
 	git_threads_init();
 
 	if (git_packbuilder_new(&pb, repo) < 0)
 		die_giterror();
+
+	if (argc > 1)
+		git_packbuilder_set_threads(pb, atoi(argv[1]));
 
 	for (;;) {
 		if (!fgets(line, sizeof(line), stdin)) {
@@ -31,7 +35,7 @@ int cmd_pack_objects(git_repository *repo, int argc, const char **argv)
 			die_giterror();
 	}
 
-	if (git_packbuilder_write(pb, argv[0], 0) < 0)
+	if (git_packbuilder_write(pb, argv[0]) < 0)
 		die_giterror();
 
 	git_packbuilder_free(pb);
