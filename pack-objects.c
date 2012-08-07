@@ -13,8 +13,6 @@ int cmd_pack_objects(git_repository *repo, int argc, const char **argv)
 	if (argc < 1)
 		die("usage: ./git pack-objects <dst> [<threads>]");
 
-	git_threads_init();
-
 	if (git_packbuilder_new(&pb, repo) < 0)
 		die_giterror();
 
@@ -39,7 +37,6 @@ int cmd_pack_objects(git_repository *repo, int argc, const char **argv)
 		die_giterror();
 
 	git_packbuilder_free(pb);
-	git_threads_shutdown();
 
 	return 0;
 }

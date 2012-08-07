@@ -55,6 +55,8 @@ int run_cmd(cmd cb, int argc, const char **argv)
 	int error;
 	git_repository *repo = NULL;
 
+	git_threads_init();
+
 	error = git_repository_open(&repo, repo_path ? repo_path : ".git");
 	if (error < 0)
 		die_giterror();
@@ -65,6 +67,8 @@ int run_cmd(cmd cb, int argc, const char **argv)
 		free(repo_path);
 	if (repo)
 		git_repository_free(repo);
+
+	git_threads_shutdown();
 
 	return error;
 }
