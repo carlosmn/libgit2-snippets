@@ -62,6 +62,8 @@ int run_cmd(cmd cb, int argc, const char **argv)
 		die_giterror();
 
 	error = cb(repo, argc, argv);
+	if (error < 0)
+		die_giterror();
 
 	if (repo_path)
 		free(repo_path);
