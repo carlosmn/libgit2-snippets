@@ -12,6 +12,7 @@ static struct {
 } cmds[] = {
 	{"fetch", cmd_fetch},
 	{"pack-objects", cmd_pack_objects},
+	{"push", cmd_push},
 	{NULL, NULL}
 };
 
