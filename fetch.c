@@ -1,5 +1,7 @@
 
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "common.h"
 
@@ -21,6 +23,23 @@ static int cb_update_tips(const char *ref, const git_oid *old,
 	return 0;
 }
 
+static int cb_auth(http_auth_data *auth_data, void *data)
+{
+	char username[128];
+	char *password;
+
+	printf("Username: ");
+	fgets(username, 128, stdin);
+	username[strlen(username)-1] = '\0';
+
+	password = getpass("Password: ");
+
+	auth_data->username = strdup(username);
+	auth_data->password = strdup(password);
+
+	return 0;
+}
+
 int cmd_fetch(git_repository *repo, int argc, const char **argv)
 {
 	int error;
@@ -29,7 +48,9 @@ int cmd_fetch(git_repository *repo, int argc, const char **argv)
 	git_indexer_stats stats;
 	struct git_remote_callbacks callbacks;
 
+	memset(&callbacks, 0x0, sizeof(callbacks));
 	callbacks.update_tips = cb_update_tips;
+	callbacks.http_auth = cb_auth;
 
 	if (argc < 1)
 		die("usage: ./git fetch <remote>");
