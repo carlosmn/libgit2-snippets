@@ -1,7 +1,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "common.h"
 
@@ -19,23 +18,6 @@ static int cb_update_tips(const char *ref, const git_oid *old,
 	hex = git_oid_allocfmt(new);
 	fprintf(stderr, "%s\n", hex);
 	free(hex);
-
-	return 0;
-}
-
-static int cb_auth(http_auth_data *auth_data, void *data)
-{
-	char username[128];
-	char *password;
-
-	printf("Username: ");
-	fgets(username, 128, stdin);
-	username[strlen(username)-1] = '\0';
-
-	password = getpass("Password: ");
-
-	auth_data->username = strdup(username);
-	auth_data->password = strdup(password);
 
 	return 0;
 }

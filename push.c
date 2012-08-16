@@ -5,6 +5,7 @@
 
 int cmd_push(git_repository *repo, int argc, const char **argv)
 {
+	struct git_remote_callbacks callbacks;
 	git_remote *remote;
 	git_push *push;
 
@@ -13,6 +14,9 @@ int cmd_push(git_repository *repo, int argc, const char **argv)
 
 	if (git_remote_load(&remote, repo, argv[0]) < 0)
 		return -1;
+
+	callbacks.http_auth = cb_auth;
+	git_remote_set_callbacks(remote, &callbacks);
 
 	if (git_push_new(&push, remote) < 0)
 		return -1;

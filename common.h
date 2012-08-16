@@ -14,4 +14,6 @@ int cmd_fetch(git_repository *, int, const char **);
 int cmd_pack_objects(git_repository *, int, const char **);
 int cmd_push(git_repository *, int, const char **);
 
+int cb_auth(http_auth_data *auth_data, void *data);
+
 #endif /* COMMON_H */
