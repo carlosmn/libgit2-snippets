@@ -43,6 +43,8 @@ int cmd_fetch(git_repository *repo, int argc, const char **argv)
 
 	git_remote_set_callbacks(r, &callbacks);
 
+	git_remote_check_cert(r, 0);
+
 	error = git_remote_connect(r, GIT_DIR_FETCH);
 	if (error < 0)
 		die_giterror();

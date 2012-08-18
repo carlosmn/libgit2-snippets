@@ -18,6 +18,8 @@ int cmd_push(git_repository *repo, int argc, const char **argv)
 	callbacks.http_auth = cb_auth;
 	git_remote_set_callbacks(remote, &callbacks);
 
+	git_remote_check_cert(remote, 0);
+
 	if (git_push_new(&push, remote) < 0)
 		return -1;
 
